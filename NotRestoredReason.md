@@ -64,7 +64,8 @@ For cross-origin frames, we should not expose the information on what blocked BF
 ### **Example-1**
 
 
-![drawing 1](https://screenshot.googleplex.com/9SPkPXnMMPcvjUL.png)
+![image](https://user-images.githubusercontent.com/4560413/138027196-d295f3b7-c5fe-4d12-85f3-0b1b91490921.png)
+
 
 
 ```
@@ -85,7 +86,7 @@ For cross-origin frames, we should not expose the information on what blocked BF
 ### **Example-2 (cross-origin iframes)**
 
 
-![drawing 2](https://screenshot.googleplex.com/88yefSpBsz6DsjK.png)
+![image](https://user-images.githubusercontent.com/4560413/138027215-b7d17251-732a-457a-8606-8f5ba5dbbf57.png)
 
 
 ```
