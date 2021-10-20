@@ -64,11 +64,7 @@ For cross-origin frames, we should not expose the information on what blocked BF
 ### **Example-1**
 
 
-
-<p id="gdcalert1" ><span style="color: red; font-weight: bold">>>>>  GDC alert: inline drawings not supported directly from Docs. You may want to copy the inline drawing to a standalone drawing and export by reference. See <a href=http://go/g3doc-drawings>go/g3doc-drawings</a> for details. The img URL below is a placeholder. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert2">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>> </span></p>
-
-
-![drawing](https://docs.google.com/a/google.com/drawings/d/12345/export/png)
+![drawing](https://screenshot.googleplex.com/9SPkPXnMMPcvjUL.png)
 
 
 ```
@@ -89,11 +85,7 @@ For cross-origin frames, we should not expose the information on what blocked BF
 ### **Example-2 (cross-origin iframes)**
 
 
-
-<p id="gdcalert2" ><span style="color: red; font-weight: bold">>>>>  GDC alert: inline drawings not supported directly from Docs. You may want to copy the inline drawing to a standalone drawing and export by reference. See <a href=http://go/g3doc-drawings>go/g3doc-drawings</a> for details. The img URL below is a placeholder. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert3">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>> </span></p>
-
-
-![drawing](https://docs.google.com/a/google.com/drawings/d/12345/export/png)
+![drawing](https://screenshot.googleplex.com/88yefSpBsz6DsjK.png)
 
 
 ```
