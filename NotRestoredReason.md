@@ -55,7 +55,7 @@ For cross-origin frames, this can report
 
 
 1. HTML ID of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
-2. URL of the frame
+2. "src" of the frame (not the current URL)
 3. Whether or not the frame blocked BFCache
 
 For cross-origin frames, we should not expose the information on what blocked BFCache to avoid cross-site information leaks. Even when blocked == True, we should not report any reasons.
