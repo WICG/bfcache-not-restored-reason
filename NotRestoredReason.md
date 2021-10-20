@@ -123,11 +123,11 @@ We could report only the blocking frames (and their parents), instead of reporti
 
 We can report reasons in strings. But we need to make sure that we differentiate between spec-mandated blocking reasons vs browser specific reasons. 
 
-We could split the reasons into two.
+We could add "x-" to the browser specific reasons to distinguish them.
 
 
 ```
-// foo is a specced reason, bar is browser specific.
+// foo is browser-specific, bar is specced.
 ["x-foo", "bar"]
 ```
 
