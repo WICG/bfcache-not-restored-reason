@@ -109,9 +109,9 @@ For cross-origin frames, we should not expose the information on what blocked BF
 
 ### **Cross-origin iframes**
 
-We don’t want to leak cross-origin information. While exposing things that the outer page knows, i.e. id=”” and src=”” attribute values (reference: [Measure Memory API](https://wicg.github.io/performance-measure-memory/#dictdef-memoryattributioncontainer)), we certainly don’t want to expose the blocking reasons, and it is not clear if we can expose the fact that it blocked BFCache (or not).
+We don’t want to leak cross-origin information. While exposing things that the outer page knows, i.e. id=”” and src=”” attribute values (reference: [Measure Memory API](https://wicg.github.io/performance-measure-memory/#dictdef-memoryattributioncontainer)), we certainly don’t want to expose the blocking reasons.
 
-But if we expose the same-origin information, that could indirectly imply the BFCache eligibility of the cross-site iframes, so maybe this is fine.
+We think exposing whether or not the cross-origin iframes blocked BFCache is fine, as developers can test it.
 
 
 ### **Only report blocking frames?**
