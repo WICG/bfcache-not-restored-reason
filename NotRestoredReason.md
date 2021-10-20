@@ -127,7 +127,8 @@ We could split the reasons into two.
 
 
 ```
-{"spec reasons": [A, B], "non-spec reasons": [C]}
+// foo is a specced reason, bar is browser specific.
+["x-foo", "bar"]
 ```
 
 
