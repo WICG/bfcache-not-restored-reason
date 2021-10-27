@@ -38,17 +38,18 @@ They need to know whether the frame blocked BFCache or not, and if so the reason
 
 ## Exposing Not-restored reasons in Tree structure
 
-We can report the not-restored reasons in a tree structure representing the frame tree.
+We can report the not-restored reasons in a tree structure JavaScript Object representing the frame tree.
 
 For same-origin frames, this can report
 
 
 
 1. HTML ID of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
-2. URL of the frame
-3. Whether or not the frame blocked BFCache
-4. Reasons blocking BFCache (can be empty)
-5. Child frames
+2. Location (URL) of the frame
+3. "src" of the frame
+4. Whether or not the frame blocked BFCache
+5. Reasons blocking BFCache (can be empty)
+6. Child frames
 
 For cross-origin frames, this can report
 
@@ -71,12 +72,13 @@ For cross-origin frames, we should not expose the information on what blocked BF
 ```
 {
   URL:"a.com",
+  src: "a.com",
   Id: "x",
   blocked: False,
   reasons:[],
   children: [
-  	{URL:"a.com", id: "y", blocked: False, reasons:[], children: []},
-  	{URL:"a.com", id: "z", blocked: True, reasons:["Broadcast channel"], children: []}
+  	{URL:"a.com", src: "a.com", id: "y", blocked: False, reasons:[], children: []},
+  	{URL:"a.com", src: "a.com", id: "z", blocked: True, reasons:["Broadcast channel"], children: []}
   ]
 }
 ```
@@ -92,12 +94,13 @@ For cross-origin frames, we should not expose the information on what blocked BF
 ```
 {
   URL:"a.com",
+  src: "a.com",
   Id: "x",
   blocked: False,
   reasons:[],
   children: [
-  	{URL:"a.com", id: "y", blocked: False, reasons:[], children: []},
-  	{URL:"b.com", id: "z", blocked: True, reasons:[], children: []}
+  	{URL:"a.com", src: "a.com", id: "y", blocked: False, reasons:[], children: []},
+  	{URL:"", src: "b.com", id: "z", blocked: True, reasons:[], children: []}
   ]
 }
 ```
@@ -163,15 +166,12 @@ window.addEventListener('pageshow', function(event) {
 
 
 ```
-let options = {
-  types: ['bfcache'],
-  buffered: true
-}
-
-let observer = new ReportingObserver(function(reports, observer) {
-  reportBtn.onclick = () => displayReports(reports);
-}, options);
-observer.observe();
+Report-To: {
+             "max_age": 10886400,
+             "endpoints": [{
+               "url": "a.com"
+             }]
+           }
 // -> [{URL:"a.com", Id: "x", blocked: True, reasons:["broadcast channel"], children:[]}]
 ```
 
