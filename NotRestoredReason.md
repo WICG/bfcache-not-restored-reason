@@ -136,25 +136,11 @@ We could add "x-" to the browser specific reasons to distinguish them.
 
 ## How to expose data
 
-There are several options on how to expose this data. We could expose via multiple APIs if it makes sense.
+There are several options on how to expose this data. The current plan is to expose it in two ways:
 
+1.) Reporting API 
 
-### **Pageshow API**
-
-Pageshow API is called every time a page is loaded, and reports the ‘persisted’ parameter to suggest whether it was the initial load or the cache load.
-
-We can extend the pageshow API by reporting the not-restored reasons when persisted == false (BFCache is not used). 
-
-
-```
-window.addEventListener('pageshow', function(event) {
-	if (!event.persisted) {
-		console.log("BFCache was not used.");
-	const reasons = event.notRestoredReasons;
-    // [{URL:"a.com", Id: "x", blocked: True, reasons:["broadcast channel"], children:[]}];
-}
-})
-```
+2.) Performance Navigation Timing API
 
 
 
@@ -189,6 +175,26 @@ for (var i=0; i < perfEntries.length; i++) {
 }
 ```
 
+
+
+### **(Option considered:) Pageshow API**
+
+Pageshow API is called every time a page is loaded, and reports the ‘persisted’ parameter to suggest whether it was the initial load or the cache load.
+
+We can extend the pageshow API by reporting the not-restored reasons when persisted == false (BFCache is not used). 
+
+But as per WICG discussion, Performance Navigation Timing API was more preferred, and we are not going to implement this as Pageshow API.
+
+
+```
+window.addEventListener('pageshow', function(event) {
+	if (!event.persisted) {
+		console.log("BFCache was not used.");
+	const reasons = event.notRestoredReasons;
+    // [{URL:"a.com", Id: "x", blocked: True, reasons:["broadcast channel"], children:[]}];
+}
+})
+```
 
 
 ## References
