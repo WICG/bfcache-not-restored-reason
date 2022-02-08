@@ -219,3 +219,4 @@ window.addEventListener('pageshow', function(event) {
 *   [Reporting API (MDN)](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API) 
 *   [Performance Timing API (MDN)](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming)
 *   [Measure Memory API](https://wicg.github.io/performance-measure-memory/#dictdef-memoryattributioncontainer)
+*   [TPAC WebPerf WG minutes](https://docs.google.com/document/d/1GQpM8IvL4feXQ0oQdCQIPKhZZkMLNTYJQhBUntMxPkI/edit#heading=h.mo0swzgvknmp)
