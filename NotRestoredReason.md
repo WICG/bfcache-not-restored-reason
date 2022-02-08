@@ -26,6 +26,15 @@ Developers can gather the hit-rate of BFCache on their site by using [the pagesh
 
 We would like to make it possible for sites to collect information on why BFCache is not used on a history navigation, so that they can take actions on each reason and make their page BFCache compatible.
 
+## Goals
+
+*   Provide a way to gather data as to why a page is not served from BFCache on a history navigation.
+*   Provide an easy way to debug a website and make it BFCache compatible.
+
+## Non-goals
+
+*   Provide a way to disable BFCache.
+
 
 ## Developers requirements
 
@@ -138,9 +147,9 @@ We could add "x-" to the browser specific reasons to distinguish them.
 
 There are several options on how to expose this data. The current plan is to expose it in two ways:
 
-1.) Reporting API 
+1. Reporting API 
 
-2.) Performance Navigation Timing API
+2. Performance Navigation Timing API
 
 
 
