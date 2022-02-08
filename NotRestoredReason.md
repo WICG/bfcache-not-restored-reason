@@ -187,8 +187,10 @@ for (var i=0; i < perfEntries.length; i++) {
 ```
 
 
+## Considered alternatives
 
-### **(Option considered:) Pageshow API**
+
+### **Pageshow API**
 
 Pageshow API is called every time a page is loaded, and reports the ‘persisted’ parameter to suggest whether it was the initial load or the cache load.
 
