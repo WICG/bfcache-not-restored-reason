@@ -71,6 +71,8 @@ For cross-origin frames, this can report
 For cross-origin frames, we should not expose the information on what blocked BFCache to avoid cross-site information leaks. Even when blocked == True, we should not report any reasons.
 
 
+## Examples
+
 ### **Example-1**
 
 <img src="https://user-images.githubusercontent.com/4560413/138027196-d295f3b7-c5fe-4d12-85f3-0b1b91490921.png" width="300" height="300">
