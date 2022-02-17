@@ -47,9 +47,9 @@ They need to know whether the frame blocked BFCache or not, and if so the reason
 
 ## Exposing Not-restored reasons in Tree structure
 
-We can report the not-restored reasons in a tree structure JavaScript Object representing the frame tree.
+We should report the not-restored reasons in a tree structure JavaScript Object representing the frame tree.
 
-For same-origin frames, this can report
+For same-origin frames, this should report
 
 
 
@@ -60,7 +60,7 @@ For same-origin frames, this can report
 5. Reasons blocking BFCache (can be empty)
 6. Child frames
 
-For cross-origin frames, this can report
+For cross-origin frames, this should report
 
 
 
