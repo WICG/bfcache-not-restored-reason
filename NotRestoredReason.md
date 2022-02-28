@@ -133,7 +133,7 @@ We could report only the blocking frames (and their parents), instead of reporti
 
 ### **Specced reasons vs browser specific reasons**
 
-We can report reasons in strings. But we need to make sure that we differentiate between spec-mandated blocking reasons vs browser specific reasons. 
+We should report reasons in strings. But we need to make sure that we differentiate between spec-mandated blocking reasons vs browser specific reasons. 
 
 We could add "x-" to the browser specific reasons to distinguish them.
 
@@ -157,7 +157,7 @@ There are several options on how to expose this data. The current plan is to exp
 
 ### **Reporting API**
 
-[Reporting API](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API) lets you observe a deprecated feature usage / browser request intervention / crashes.  We can have another category “bfcache” here.
+[Reporting API](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API) lets you observe a deprecated feature usage / browser request intervention / crashes.  We would like to have another category “bfcache” here.
 
 
 ```
@@ -194,7 +194,7 @@ for (var i=0; i < perfEntries.length; i++) {
 
 Pageshow API is called every time a page is loaded, and reports the ‘persisted’ parameter to suggest whether it was the initial load or the cache load.
 
-We can extend the pageshow API by reporting the not-restored reasons when persisted == false (BFCache is not used). 
+We could extend the pageshow API by reporting the not-restored reasons when persisted == false (BFCache is not used). 
 
 But as per WICG discussion, Performance Navigation Timing API was more preferred, and we are not going to implement this as Pageshow API.
 
