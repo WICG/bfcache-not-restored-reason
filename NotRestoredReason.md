@@ -1,4 +1,4 @@
-# **NotRestoredReason API Explainer Draft**
+# **NotRestoredReason API Explainer**
 
 
 ## Authors:
