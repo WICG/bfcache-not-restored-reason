@@ -41,7 +41,7 @@ We would like to make it possible for sites to collect information on why BFCach
 
 The goal is to equip developers with enough information to make their site bfcache compatible.
 
-In order to debug the site, developers need to be able to identify what frame within the frame-tree information applies to. This means they need to be given a tree-structure and ids that match the frame tree. The URL for each frame is helpful for knowing the state of the frame (but cannot be given for a cross-origin iframe).
+In order to debug the site, developers need to be able to identify what frame within the frame-tree information applies to. This means they need to be given a tree-structure and Ids that match the frame tree. The URL for each frame is helpful for knowing the state of the frame (but cannot be given for a cross-origin iframe).
 
 They need to know whether the frame blocked BFCache or not, and if so the reasons that blocked BFCache.
 
@@ -54,7 +54,7 @@ For same-origin frames, this should report
 
 
 
-1. HTML ID of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
+1. HTML Id of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
 2. Location (URL) of the frame
 3. "src" of the frame
 4. Whether or not the frame blocked BFCache
@@ -85,11 +85,11 @@ For cross-origin frames, we should not expose the information on what blocked BF
   URL:"a.com",
   src: "a.com",
   Id: "x",
-  blocked: False,
+  blocked: false,
   reasons:[],
   children: [
-  	{URL:"a.com", src: "a.com", id: "y", blocked: False, reasons:[], children: []},
-  	{URL:"a.com", src: "a.com", id: "z", blocked: True, reasons:["Broadcast channel"], children: []}
+  	{URL:"a.com", src: "a.com", Id: "y", blocked: false, reasons:[], children: []},
+  	{URL:"a.com", src: "a.com", Id: "z", blocked: true, reasons:["Broadcast channel"], children: []}
   ]
 }
 ```
@@ -106,11 +106,11 @@ For cross-origin frames, we should not expose the information on what blocked BF
   URL:"a.com",
   src: "a.com",
   Id: "x",
-  blocked: False,
+  blocked: false,
   reasons:[],
   children: [
-  	{URL:"a.com", src: "a.com", id: "y", blocked: False, reasons:[], children: []},
-  	{URL:"", src: "b.com", id: "z", blocked: True, reasons:[], children: []}
+  	{URL:"a.com", src: "a.com", Id: "y", blocked: false, reasons:[], children: []},
+  	{URL:"", src: "b.com", Id: "z", blocked: true, reasons:[], children: []}
   ]
 }
 ```
@@ -165,10 +165,10 @@ There are several options on how to expose this data. The current plan is to exp
 Report-To: {
              "max_age": 10886400,
              "endpoints": [{
-               "url": "a.com"
+               "URL": "a.com"
              }]
            }
-// -> [{URL:"a.com", Id: "x", blocked: True, reasons:["broadcast channel"], children:[]}]
+// -> [{URL:"a.com", Id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
 ```
 
 
@@ -183,7 +183,7 @@ var perfEntries = performance.getEntriesByType("navigation");
 for (var i=0; i < perfEntries.length; i++) {
 	console.log("= Navigation entry[" + i + "]");
 	var p = perfEntries[i];
-	// p.notRestoredReason == [{URL:"a.com", Id: "x", blocked: True, reasons:["broadcast channel"], children:[]}]
+	// p.notRestoredReason == [{URL:"a.com", Id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
 }
 ```
 
@@ -205,7 +205,7 @@ window.addEventListener('pageshow', function(event) {
 	if (!event.persisted) {
 		console.log("BFCache was not used.");
 	const reasons = event.notRestoredReasons;
-    // [{URL:"a.com", Id: "x", blocked: True, reasons:["broadcast channel"], children:[]}];
+    // [{URL:"a.com", Id: "x", blocked: true, reasons:["broadcast channel"], children:[]}];
 }
 })
 ```
