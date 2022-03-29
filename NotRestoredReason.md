@@ -82,14 +82,14 @@ For cross-origin frames, we should not expose the information on what blocked BF
 
 ```
 {
-  URL:"a.com",
+  url:"a.com",
   src: "a.com",
-  Id: "x",
+  id: "x",
   blocked: false,
   reasons:[],
   children: [
-  	{URL:"a.com", src: "a.com", Id: "y", blocked: false, reasons:[], children: []},
-  	{URL:"a.com", src: "a.com", Id: "z", blocked: true, reasons:["Broadcast channel"], children: []}
+  	{url:"a.com", src: "a.com", id: "y", blocked: false, reasons:[], children: []},
+  	{url:"a.com", src: "a.com", id: "z", blocked: true, reasons:["Broadcast channel"], children: []}
   ]
 }
 ```
@@ -103,14 +103,14 @@ For cross-origin frames, we should not expose the information on what blocked BF
 
 ```
 {
-  URL:"a.com",
+  url:"a.com",
   src: "a.com",
-  Id: "x",
+  id: "x",
   blocked: false,
   reasons:[],
   children: [
-  	{URL:"a.com", src: "a.com", Id: "y", blocked: false, reasons:[], children: []},
-  	{URL:"", src: "b.com", Id: "z", blocked: true, reasons:[], children: []}
+  	{url:"a.com", src: "a.com", id: "y", blocked: false, reasons:[], children: []},
+  	{url:"", src: "b.com", id: "z", blocked: true, reasons:[], children: []}
   ]
 }
 ```
@@ -165,10 +165,10 @@ There are several options on how to expose this data. The current plan is to exp
 Report-To: {
              "max_age": 10886400,
              "endpoints": [{
-               "URL": "a.com"
+               "url": "a.com"
              }]
            }
-// -> [{URL:"a.com", Id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
+// -> [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
 ```
 
 
@@ -183,7 +183,7 @@ var perfEntries = performance.getEntriesByType("navigation");
 for (var i=0; i < perfEntries.length; i++) {
 	console.log("= Navigation entry[" + i + "]");
 	var p = perfEntries[i];
-	// p.notRestoredReason == [{URL:"a.com", Id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
+	// p.notRestoredReason == [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
 }
 ```
 
@@ -205,7 +205,7 @@ window.addEventListener('pageshow', function(event) {
 	if (!event.persisted) {
 		console.log("BFCache was not used.");
 	const reasons = event.notRestoredReasons;
-    // [{URL:"a.com", Id: "x", blocked: true, reasons:["broadcast channel"], children:[]}];
+    // [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}];
 }
 })
 ```
