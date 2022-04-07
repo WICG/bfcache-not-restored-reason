@@ -27,6 +27,8 @@ Developers can gather the hit-rate of BFCache on their site by using [the pagesh
 
 We would like to make it possible for sites to collect information on why BFCache is not used on a history navigation, so that they can take actions on each reason and make their page BFCache compatible.
 
+Note that **we are not going to expose information about cross-origin subframes, except for the information about whether or not they blocked bfcache**.
+
 ## Goals
 
 *   Provide a way to gather data as to why a page is not served from BFCache on a history navigation.
@@ -35,6 +37,7 @@ We would like to make it possible for sites to collect information on why BFCach
 ## Non-goals
 
 *   Provide a way to disable BFCache.
+*   Provide insights into cross-origin subframes.
 
 
 ## Developers requirements
