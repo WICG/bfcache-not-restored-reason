@@ -182,12 +182,16 @@ Report-To: {
 
 
 ```
-var perfEntries = performance.getEntriesByType("navigation");
-for (var i=0; i < perfEntries.length; i++) {
+window.addEventListener("pageshow", (event) => {
+  if (!event.persisted) {
+    const navEntries = performance.getEntriesByType("navigation");
+    for (var i=0; i < navEntries.length; i++) {
 	console.log("= Navigation entry[" + i + "]");
-	var p = perfEntries[i];
+	var p = navEntries[i];
 	// p.notRestoredReason == [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
-}
+    }
+  }
+});
 ```
 
 
