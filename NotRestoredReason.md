@@ -20,10 +20,10 @@
 
 Browsers today offer an optimization feature for history navigation, called [back/forward cache](https://developers.google.com/web/updates/2018/07/page-lifecycle-api#back-forward-cache) (BFCache). This enables instant loading experience when users go back to a page they already visited. 
 
-Today pages can be blocked from BFCache for different reasons, such as reasons required by spec and reasons specific to the browser implementation. 
+Today pages can be blocked from entering BFCache or not be restored from BFCache for different reasons, such as reasons required by spec and reasons specific to the browser implementation. 
 Here is the full list of reasons that can be reported: [spreadsheet](https://docs.google.com/spreadsheets/d/1li0po_ETJAIybpaSX5rW_lUN62upQhY0tH4pR5UPt60/edit#gid=0).
 
-Developers can gather the hit-rate of BFCache on their site by using [the pageshow handler persisted parameter](https://html.spec.whatwg.org/multipage/browsing-the-web.html#dom-pagetransitionevent-persisted-dev) and [PerformanceNavigationTiming.type(back-forward)](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigation/type). However, there is no way for developers to tell what reasons are blocking their pages from BFCache in the wild. They are not able to know what actions to take to improve the hit-rate.
+Developers can gather the hit-rate of BFCache on their site by using [the pageshow handler persisted parameter](https://html.spec.whatwg.org/multipage/browsing-the-web.html#dom-pagetransitionevent-persisted-dev) and [PerformanceNavigationTiming.type(back-forward)](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigation/type). However, there is no way for developers to tell what reasons are blocking their pages from being restored from BFCache in the wild. They are not able to know what actions to take to improve the hit-rate.
 
 We would like to make it possible for sites to collect information on why BFCache is not used on a history navigation, so that they can take actions on each reason and make their page BFCache compatible.
 
@@ -46,7 +46,7 @@ The goal is to equip developers with enough information to make their site bfcac
 
 In order to debug the site, developers need to be able to identify what frame within the frame-tree information applies to. This means they need to be given a tree-structure and Ids that match the frame tree. The URL for each frame is helpful for knowing the state of the frame (but cannot be given for a cross-origin iframe).
 
-They need to know whether the frame blocked BFCache or not, and if so the reasons that blocked BFCache.
+They need to know whether the frame had NotRestoredReasons or not, and if so what reasons are present.
 
 
 ## Exposing Not-restored reasons in Tree structure
@@ -60,8 +60,8 @@ For same-origin frames, this should report
 1. HTML Id of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
 2. Location (URL) of the frame
 3. "src" of the frame
-4. Whether or not the frame blocked BFCache
-5. Reasons blocking BFCache (can be empty)
+4. Whether or not the frame had NotRestoredReason
+5. NotRestoredReasons (can be empty)
 6. Child frames
 
 For cross-origin frames, this should report
@@ -70,7 +70,7 @@ For cross-origin frames, this should report
 
 1. HTML ID of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
 2. "src" of the frame (not the current URL)
-3. Whether or not the frame blocked BFCache
+3. Whether or not the frame had NotRestoredReasons
 
 For cross-origin frames, we should not expose the information on what blocked BFCache to avoid cross-site information leaks. Even when blocked == True, we should not report any reasons.
 
