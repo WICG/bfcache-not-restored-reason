@@ -58,19 +58,21 @@ For same-origin frames, this should report
 
 
 1. HTML Id of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
-2. Location (URL) of the frame
-3. "src" of the frame
-4. Whether or not the frame had NotRestoredReason
-5. NotRestoredReasons (can be empty)
-6. Child frames
+2. name attribute of the frame (e.g. “bar” when&lt;iframe name = “bar”>)
+3. Location (URL) of the frame
+4. "src" of the frame
+5. Whether or not the frame had NotRestoredReason
+6. NotRestoredReasons (can be empty)
+7. Child frames
 
 For cross-origin frames, this should report
 
 
 
 1. HTML ID of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
-2. "src" of the frame (not the current URL)
-3. Whether or not the frame had NotRestoredReasons
+2. name attribute of the frame (e.g. “bar” when&lt;iframe name = “bar”>)
+3. "src" of the frame (not the current URL)
+4. Whether or not the frame had NotRestoredReasons
 
 For cross-origin frames, we should not expose the information on what blocked BFCache to avoid cross-site information leaks. Even when blocked == True, we should not report any reasons.
 
@@ -88,6 +90,7 @@ For cross-origin frames, we should not expose the information on what blocked BF
   url:"a.com",
   src: "a.com",
   id: "x",
+  name: "x",
   blocked: false,
   reasons:[],
   children: [
@@ -109,6 +112,7 @@ For cross-origin frames, we should not expose the information on what blocked BF
   url:"a.com",
   src: "a.com",
   id: "x",
+  name: "x",
   blocked: false,
   reasons:[],
   children: [
