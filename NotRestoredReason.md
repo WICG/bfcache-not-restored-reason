@@ -129,14 +129,14 @@ This is true even when a subtree has same origin subframe in it, like the exampl
 
 ```
 {
-  url:”a.com”, /*A1*/ 
+  url:”a.com”, /* a.com */ 
   src:"a.com",
   id: “x”,
   name: "x",
   blocked: False,
   reasons:[],
   children: [
-  	{url:"", src:”b.com”, id: "y", name: "y", blocked: False, reasons:[], children: []}, /*B and its subtree*/
+  	{url:"", src:”b.com”, id: "y", name: "y", blocked: False, reasons:[], children: []}, /* b.com and its subtree */
   ]
 }
 ```
