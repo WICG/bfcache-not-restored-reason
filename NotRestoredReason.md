@@ -94,8 +94,8 @@ For cross-origin frames, we should not expose the information on what blocked BF
   blocked: false,
   reasons:[],
   children: [
-  	{url:"a.com", src: "a.com", id: "y", blocked: false, reasons:[], children: []},
-  	{url:"a.com", src: "a.com", id: "z", blocked: true, reasons:["Broadcast channel"], children: []}
+  	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: false, reasons:[], children: []},
+  	{url:"a.com", src: "a.com", id: "z", name: "z", blocked: true, reasons:["Broadcast channel"], children: []}
   ]
 }
 ```
@@ -116,13 +116,31 @@ For cross-origin frames, we should not expose the information on what blocked BF
   blocked: false,
   reasons:[],
   children: [
-  	{url:"a.com", src: "a.com", id: "y", blocked: false, reasons:[], children: []},
-  	{url:"", src: "b.com", id: "z", blocked: true, reasons:[], children: []}
+  	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: false, reasons:[], children: []},
+  	{url:"", src: "b.com", id: "z", name: "z", blocked: true, reasons:[], children: []}
   ]
 }
 ```
 
+### **Example-3 (cross-origin subtree)**
+If a cross-origin iframe has a subtree under it, we mask the information of subtree, only reporting the id, src, name and whether or not the subtree blocked bfcache.
+This is true even when a subtree has same origin subframe in it, like the example below.
+<img src="https://screenshot.googleplex.com/6Y3rCSdifsQPLuJ.png" width="300" height="300">
 
+
+```
+{
+  url:”a.com”, /*A1*/ 
+  src:"a.com",
+  id: “x”,
+  name: "x",
+  blocked: False,
+  reasons:[],
+  children: [
+  	{url:"", src:”b.com”, id: "y", name: "y", blocked: False, reasons:[], children: []}, /*B and its subtree*/
+  ]
+}
+```
 
 ## Detailed design discussion
 
