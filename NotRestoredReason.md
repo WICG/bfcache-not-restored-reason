@@ -125,8 +125,7 @@ For cross-origin frames, we should not expose the information on what blocked BF
 ### **Example-3 (cross-origin subtree)**
 If a cross-origin iframe has a subtree under it, we mask the information of subtree, only reporting the id, src, name and whether or not the subtree blocked bfcache.
 This is true even when a subtree has same origin subframe in it, like the example below.
-<img src="https://screenshot.googleplex.com/6Y3rCSdifsQPLuJ.png" width="300" height="300">
-
+<img src="https://user-images.githubusercontent.com/4560413/177083018-71ac35ed-efb2-4b06-8378-d6ca9fdae621.png" width="300" height="300">
 
 ```
 {
