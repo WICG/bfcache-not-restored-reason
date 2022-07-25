@@ -141,15 +141,36 @@ This is true even when a subtree has same origin subframe in it, like the exampl
 }
 ```
 
-## Detailed design discussion
-
+## Security and Privacy
 
 ### **Cross-origin iframes**
 
 We don’t want to leak cross-origin information. While exposing things that the outer page knows, i.e. id=”” and src=”” attribute values (reference: [Measure Memory API](https://wicg.github.io/performance-measure-memory/#dictdef-memoryattributioncontainer)), we certainly don’t want to expose the blocking reasons.
 
-We think exposing whether or not the cross-origin iframes blocked BFCache is fine, as developers can test it.
+In order not to expose any new cross-origin information, when a cross-origin frame exists in the frame tree, this API will only report whether or not the cross-origin subtree blocked BFCache.
+As explained in Example3 in this explainer, when the frame tree contains a cross-origin subtree, we mask the subtree information; we will not show specific reasons that blocked BFCache and only report that this subtree blocked BFCache.
 
+We think exposing whether or not the cross-origin iframes blocked BFCache is fine. This information - whether or not cross-origin subtree blocked BFCache - is not newly exposed. Site authors could discover this by clearing all other BFCache blocking reasons and then removing the cross-origin subtree before navigating and observing whether the page is BFCached or not.
+
+### **Extension usage**
+
+If users have extensions installed and they caused BFCache to be blocked, exposing reasons can be tricky.
+There are two levels of new information exposure:
+① Users have extensions installed and they are active on this page
+② **Specific** extensions are active on this page
+① is newly exposed, and maybe it’s okay. 
+But we definitely don’t want to expose any signals to detect which extensions are installed and active (②).
+We could mask all the reasons related to extensions to say “Extensions blocked BFCache”, so that we don’t give any signal for ② (turning ② into ①). 
+
+There are three possible cases of extensions:
+a) Extensions executed script / had unload handlers and blocked BFCache
+b) Extensions messaged the page and blocked BFCache
+c) Extensions modified the page and as a result blocked BFCache
+In case of a) and b), we can mask the specific information and just say “Extensions blocked BFCache”.
+In case of c), too, we could say “Extensions blocked BFCache”, instead of a new feature that the page started to use. For example, if an extension modified the page to use IndexedDB and that blocked BFCache, we would not report “Indexed DB usage” but only say “Extensions blocked BFCache”.
+
+
+## Detailed design discussion
 
 ### **Only report blocking frames?**
 
@@ -167,7 +188,6 @@ We could add "x-" to the browser specific reasons to distinguish them.
 // foo is browser-specific, bar is specced.
 ["x-foo", "bar"]
 ```
-
 
 
 ## How to expose data
