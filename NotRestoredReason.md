@@ -156,7 +156,6 @@ We think exposing whether or not the cross-origin iframes blocked BFCache is fin
 ### **Extension usage**
 
 If users have extensions installed and they caused BFCache to be blocked, exposing reasons can be tricky.
-
 There are two levels of new information exposure:
 
 ① Users have extensions installed and they are active on this page
@@ -164,10 +163,8 @@ There are two levels of new information exposure:
 ② **Specific** extensions are active on this page
 
 ① is newly exposed, and maybe it’s okay. 
-
 But we definitely don’t want to expose any signals to detect which extensions are installed and active (②).
 We could mask all the reasons related to extensions to say “Extensions blocked BFCache”, so that we don’t give any signal for ② (turning ② into ①). 
-
 There are three possible cases of extensions:
 
 a) Extensions executed script / had unload handlers and blocked BFCache
@@ -179,6 +176,9 @@ c) Extensions modified the page and as a result blocked BFCache
 In case of a) and b), we can mask the specific information and just say “Extensions blocked BFCache”.
 
 In case of c), too, we could say “Extensions blocked BFCache”, instead of a new feature that the page started to use. For example, if an extension modified the page to use IndexedDB and that blocked BFCache, we would not report “Indexed DB usage” but only say “Extensions blocked BFCache”.
+
+If exposing ① Extensions' presence is not okay to expose at all, we can mask all a) b) c) as "Internal error". There are non-extension related reasons that could go into this category, so this will not necessarily expose exnesions' presence.
+
 
 
 ## Detailed design discussion
