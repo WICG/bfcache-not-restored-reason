@@ -149,7 +149,7 @@ We don’t want to leak cross-origin information. While exposing things that the
 
 In order not to expose any new cross-origin information, when a cross-origin frame exists in the frame tree, this API will only report whether or not the cross-origin subtree blocked BFCache.
 
-As explained in Example3 in this explainer, when the frame tree contains a cross-origin subtree, we mask the subtree information; we will not show specific reasons that blocked BFCache and only report that this subtree blocked BFCache.
+As explained in [Example3](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-3-cross-origin-subtree) in this explainer, when the frame tree contains a cross-origin subtree, we mask the subtree information; we will not show specific reasons that blocked BFCache and only report that this subtree blocked BFCache.
 
 We think exposing whether or not the cross-origin iframes blocked BFCache is fine. This information - whether or not cross-origin subtree blocked BFCache - is not newly exposed. Site authors could discover this by clearing all other BFCache blocking reasons and then removing the cross-origin subtree before navigating and observing whether the page is BFCached or not.
 
@@ -347,7 +347,8 @@ window.addEventListener('pageshow', function(event) {
 15.  Does this specification have both "Security Considerations" and "Privacy
      Considerations" sections?
 
-     > It does now!
+     > It does now: [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#security-and-privacy
+)
 
 16.  Do features in your specification enable origins to downgrade default
      security protections?
