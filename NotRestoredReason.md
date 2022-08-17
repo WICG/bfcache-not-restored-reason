@@ -25,7 +25,7 @@ Here is the full list of reasons that can be reported: [spreadsheet](https://doc
 
 Developers can gather the hit-rate of BFCache on their site by using [the pageshow handler persisted parameter](https://html.spec.whatwg.org/multipage/browsing-the-web.html#dom-pagetransitionevent-persisted-dev) and [PerformanceNavigationTiming.type(back-forward)](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigation/type). However, there is no way for developers to tell what reasons are blocking their pages from being restored from BFCache in the wild. They are not able to know what actions to take to improve the hit-rate.
 
-We would like to make it possible for sites to collect information on why BFCache is not used on a history navigation, so that they can take actions on each reason and make their page BFCache compatible.
+We would like to make it possible for sites to collect information on why BFCache is not used on a history navigation, so that they can take actions on each reason and make their page BFCache compatible. First we will start exposing this information to PerformanceTiming API.
 
 Note that **we are not going to expose information about cross-origin subframes, except for the information about whether or not they blocked bfcache**.
 
