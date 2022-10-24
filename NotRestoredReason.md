@@ -181,6 +181,7 @@ In case of c), too, we could say “Extensions blocked BFCache”, instead of a 
 
 If exposing ① Extensions' presence is not okay to expose at all, we can mask all a) b) c) as "Internal error". There are non-extension related reasons that could go into this category, so this will not necessarily expose exnesions' presence.
 
+**After talking to privacy team, we have decided to say “Extensions blocked BFCache” for all of the extension related reasons.**
 
 
 ## Detailed design discussion
