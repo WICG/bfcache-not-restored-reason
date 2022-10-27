@@ -69,11 +69,12 @@ For same-origin frames, this should report
 
 For cross-origin frames, this should report
 
+1. HTML ID of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
+2. name attribute of the frame (e.g. “bar” when&lt;iframe name = “bar”>, report only the original name, not the updated name)
+3. "src" of the frame (not the current URL)
+4. Whether or not the frame had NotRestoredReasons
 
-
-1. Whether or not the frame had NotRestoredReasons
-
-For cross-origin frames, we should not expose the information on what blocked BFCache to avoid cross-site information leaks, or even frame id or names. 
+For cross-origin frames, we should not expose the information on what blocked BFCache to avoid cross-site information leaks.
 Even when blocked == True, we should not report any reasons.
 
 
@@ -117,7 +118,7 @@ Even when blocked == True, we should not report any reasons.
   reasons:[],
   children: [
   	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: false, reasons:[], children: []},
-  	/* for b.com */ {url:"", src: "", id: "", name: "", blocked: true, reasons:[], children: []} 
+  	/* for b.com */ {url:"", src: "b.com", id: "z", name: "z", blocked: true, reasons:[], children: []} 
   ]
 }
 ```
@@ -136,7 +137,7 @@ This is true even when a subtree has same origin subframe in it, like the exampl
   blocked: False,
   reasons:[],
   children: [
-  	/* b.com and its subtree */ {url:"", src:””, id: "", name: "", blocked: False, reasons:[], children: []},
+  	/* b.com and its subtree */ {url:"", src:”b.com”, id: "y", name: "y", blocked: False, reasons:[], children: []},
   ]
 }
 ```
