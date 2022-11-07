@@ -154,6 +154,9 @@ As explained in [Example3](https://github.com/rubberyuzu/bfcache-not-retored-rea
 
 We think exposing whether or not the cross-origin iframes blocked BFCache is fine. This information - whether or not cross-origin subtree blocked BFCache - is not newly exposed. Site authors could discover this by clearing all other BFCache blocking reasons and then removing the cross-origin subtree before navigating and observing whether the page is BFCached or not.
 
+
+NotRestoredReasons will be part of window.performance, and this is not accessible from cross-origin subframes. This is reported only to the top main frame.
+
 ### **Extension usage**
 
 If users have extensions installed and they caused BFCache to be blocked, exposing reasons can be tricky.
