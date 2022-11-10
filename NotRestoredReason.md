@@ -144,10 +144,10 @@ This is true even when a subtree has same origin subframe in it, like the exampl
 }
 ```
 
-### **Example-4**
+### **Example-4 (multiple cross-origin iframes)**
 
-<img src="https://user-images.githubusercontent.com/4560413/201040573-15136c53-b7d9-413a-a5ff-3e93ff7c2d7b.png" width="300" height="300">
-
+<img src="https://user-images.githubusercontent.com/4560413/201040573-15136c53-b7d9-413a-a5ff-3e93ff7c2d7b.png" width="600" height="300">
+If a page embeds multiple cross-origin iframes, we randomly select 
 
 
 
@@ -157,14 +157,27 @@ This is true even when a subtree has same origin subframe in it, like the exampl
 
 We don’t want to leak cross-origin information. While exposing things that the outer page knows, i.e. id=”” and src=”” attribute values (reference: [Measure Memory API](https://wicg.github.io/performance-measure-memory/#dictdef-memoryattributioncontainer)), we certainly don’t want to expose the blocking reasons.
 
-In order not to expose any new cross-origin information, when a cross-origin frame exists in the frame tree, this API will only report whether or not the cross-origin subtree blocked BFCache.
+In order not to expose any new cross-origin information, when a cross-origin frame exists in the frame tree, this API will only report whether or not the cross-origin subtree blocked BFCache, and its frame attibutes.
 
 As explained in [Example3](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-3-cross-origin-subtree) in this explainer, when the frame tree contains a cross-origin subtree, we mask the subtree information; we will not show specific reasons that blocked BFCache and only report that this subtree blocked BFCache.
 
-We think exposing whether or not the cross-origin iframes blocked BFCache is fine. This information - whether or not cross-origin subtree blocked BFCache - is not newly exposed. Site authors could discover this by clearing all other BFCache blocking reasons and then removing the cross-origin subtree before navigating and observing whether the page is BFCached or not.
-
-
 NotRestoredReasons will be part of window.performance, and this is not accessible from cross-origin subframes. This is reported only to the top main frame.
+
+#### **Single cross-origin iframe vs many cross-origin iframes**
+When we expose whether or not a cross-origin iframe blocked BFCache, site authors could potentially infer user's state. For example, when a page embeds an iframe of a social media site and if the iframe's blocking status changes based on user's logged-in state, site authors can tell if the user is logged in or not by this information.
+
+We think exposing a single bit about whether or not a cross-origin iframe blocked BFCache is fine though.
+This information - whether or not cross-origin subtree blocked BFCache - is not newly exposed. Site authors could discover this by clearing all other BFCache blocking reasons and then removing the cross-origin subtree before navigating and observing whether the page is BFCached or not.
+So giving this bit is not giving away new information, and this information can be useful so that site authors can work with the blocking sites' authors to remove the blockage.
+
+However, when there are many cross-origin iframes, this API could give many bits in one go. For example, a page could embed 20 different social media sites and tell which sites the user is logged in, each bit possibly implying the user state.
+This was also technically possible to test before this API, but if we give away the information for all the frames, then that would make it significantly easier for site authors to know this information.
+
+In order to avoid this, we propose to only expose a single bit about cross-origin iframes; that is, if there are multiple cross-origin iframes that block BFCache, we randomly select one iframe and report that it blocked BFCache.
+For the rest of the iframes, we would say "Masked".
+See [Example4](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-3-cross-origin-subtree)
+
+This way we can minimize cross-origin information leak.
 
 ### **Extension usage**
 
