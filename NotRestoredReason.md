@@ -148,7 +148,9 @@ This is true even when a subtree has same origin subframe in it, like the exampl
 
 <img src="https://user-images.githubusercontent.com/4560413/201040573-15136c53-b7d9-413a-a5ff-3e93ff7c2d7b.png" width="600" height="300">
 If multiple cross-origin iframes have blocking reasons, we randomly select one cross-origin iframe and report whether it blocked BFCache or not. For the rest of the frames, we say "masked" for the blocked value.
-See Security and Privacy section for more details.
+See [Security and Privacy](
+https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#single-cross-origin-iframe-vs-many-cross-origin-iframes
+) section for more details.
 
 ```
 {
@@ -159,9 +161,9 @@ See Security and Privacy section for more details.
   blocked: "false",
   reasons:[],
   children: [
-  	{url:"", src: "b.com", id: "y", name: "y", blocked: "masked", reasons:[], children: []},
-  	{url:"", src: "c.com", id: "z", name: "z", blocked: "true", reasons:[], children: []},
-	{url:"", src: "d.com", id: "z", name: "z", blocked: "masked", reasons:[], children: []}
+  	{url:"", src: "b.com", id: "b", name: "b", blocked: "masked", reasons:[], children: []},
+  	{url:"", src: "c.com", id: "c", name: "c", blocked: "true", reasons:[], children: []},
+	{url:"", src: "d.com", id: "d", name: "d", blocked: "masked", reasons:[], children: []}
   ]
 }
 ```
@@ -190,7 +192,8 @@ This was also technically possible to test before this API, but if we give away 
 
 In order to avoid this, we propose to only expose a single bit about cross-origin iframes; that is, if there are multiple cross-origin iframes that block BFCache, we randomly select one iframe and report that it blocked BFCache.
 For the rest of the iframes, we would say "Masked".
-See [Example4](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-3-cross-origin-subtree)
+See [Example4](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-4-multiple-cross-origin-iframes
+)
 
 This way we can minimize cross-origin information leak.
 
