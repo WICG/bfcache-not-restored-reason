@@ -97,8 +97,8 @@ In addition to this, when there are multiple cross-origin frames that block BFCa
   blocked: false,
   reasons:[],
   children: [
-  	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: false, reasons:[], children: []},
-  	{url:"a.com", src: "a.com", id: "z", name: "z", blocked: true, reasons:["Broadcast channel"], children: []}
+  	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: "false", reasons:[], children: []},
+  	{url:"a.com", src: "a.com", id: "z", name: "z", blocked: "true", reasons:["Broadcast channel"], children: []}
   ]
 }
 ```
@@ -116,11 +116,11 @@ In addition to this, when there are multiple cross-origin frames that block BFCa
   src: "a.com",
   id: "x",
   name: "x",
-  blocked: false,
+  blocked: "false",
   reasons:[],
   children: [
-  	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: false, reasons:[], children: []},
-  	/* for b.com */ {url:"", src: "b.com", id: "z", name: "z", blocked: true, reasons:[], children: []} 
+  	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: "false", reasons:[], children: []},
+  	/* for b.com */ {url:"", src: "b.com", id: "z", name: "z", blocked: "true", reasons:[], children: []} 
   ]
 }
 ```
@@ -136,10 +136,10 @@ This is true even when a subtree has same origin subframe in it, like the exampl
   src:"a.com",
   id: “x”,
   name: "x",
-  blocked: False,
+  blocked: "false",
   reasons:[],
   children: [
-  	/* b.com and its subtree */ {url:"", src:”b.com”, id: "y", name: "y", blocked: False, reasons:[], children: []},
+  	/* b.com and its subtree */ {url:"", src:”b.com”, id: "y", name: "y", blocked: "false", reasons:[], children: []},
   ]
 }
 ```
@@ -147,9 +147,24 @@ This is true even when a subtree has same origin subframe in it, like the exampl
 ### **Example-4 (multiple cross-origin iframes)**
 
 <img src="https://user-images.githubusercontent.com/4560413/201040573-15136c53-b7d9-413a-a5ff-3e93ff7c2d7b.png" width="600" height="300">
-If a page embeds multiple cross-origin iframes, we randomly select 
+If multiple cross-origin iframes have blocking reasons, we randomly select one cross-origin iframe and report whether it blocked BFCache or not. For the rest of the frames, we say "masked" for the blocked value.
+See Security and Privacy section for more details.
 
-
+```
+{
+  url:"a.com",
+  src: "a.com",
+  id: "x",
+  name: "x",
+  blocked: "false",
+  reasons:[],
+  children: [
+  	{url:"", src: "b.com", id: "y", name: "y", blocked: "masked", reasons:[], children: []},
+  	{url:"", src: "c.com", id: "z", name: "z", blocked: "true", reasons:[], children: []},
+	{url:"", src: "d.com", id: "z", name: "z", blocked: "masked", reasons:[], children: []}
+  ]
+}
+```
 
 ## Security and Privacy
 
