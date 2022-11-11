@@ -183,7 +183,7 @@ NotRestoredReasons will be part of window.performance, and this is not accessibl
 When we expose whether or not a cross-origin iframe blocked BFCache, site authors could potentially infer user's state. For example, when a page embeds an iframe of a social media site and if the iframe's blocking status changes based on user's logged-in state, site authors can tell if the user is logged in or not by this information.
 
 We think exposing a single bit about whether or not a cross-origin iframe blocked BFCache is fine though.
-This information - whether or not cross-origin subtree blocked BFCache - is not newly exposed. Site authors could discover this by clearing all other BFCache blocking reasons and then removing the cross-origin subtree before navigating and observing whether the page is BFCached or not.
+This information - whether or not cross-origin subtree blocked BFCache - is not newly exposed. Site authors could discover this by clearing all other BFCache blocking reasons and observing whether the page is BFCached or not.
 So giving this bit is not giving away new information, and this information can be useful so that site authors can work with the blocking sites' authors to remove the blockage.
 
 However, when there are many cross-origin iframes, this API could give many bits in one go. For example, a page could embed 20 different social media sites and tell which sites the user is logged in, each bit possibly implying the user state.
