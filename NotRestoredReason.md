@@ -148,6 +148,7 @@ This is true even when a subtree has same origin subframe in it, like the exampl
 
 <img src="https://user-images.githubusercontent.com/4560413/201040573-15136c53-b7d9-413a-a5ff-3e93ff7c2d7b.png" width="600" height="300">
 If multiple cross-origin iframes have blocking reasons, we randomly select one cross-origin iframe and report whether it blocked BFCache or not. For the rest of the frames, we say "masked" for the blocked value.
+
 See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#single-cross-origin-iframe-vs-many-cross-origin-iframes) section for more details.
 
 ```
