@@ -146,9 +146,8 @@ This is true even when a subtree has same origin subframe in it, like the exampl
 
 ### **Example-4 (multiple cross-origin iframes)**
 
-<img src="[https://user-images.githubusercontent.com/4560413/201040573-15136c53-b7d9-413a-a5ff-3e93ff7c2d7b.png](https://user-images.githubusercontent.com/4560413/201832390-2c7b7dd5-ae02-4089-afc1-c195d765bfd4.png)" width="600" height="300">
+<img src="https://user-images.githubusercontent.com/4560413/201832869-27fc44e0-ca58-483d-bdc6-ea9d1d953e84.png" width="600" height="250">
 If multiple cross-origin iframes have blocking reasons, we randomly select one cross-origin iframe and report whether it blocked BFCache or not. For the rest of the frames, we report null for the blocked value.
-
 
 See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#single-cross-origin-iframe-vs-many-cross-origin-iframes) section for more details.
 
@@ -191,7 +190,7 @@ However, when there are many cross-origin iframes, this API could give many bits
 This was also technically possible to test before this API, but if we give away the information for all the frames, then that would make it significantly easier for site authors to know this information.
 
 In order to avoid this, we propose to only expose a single bit about cross-origin iframes; that is, if there are multiple cross-origin iframes, we randomly select one iframe and report whether or not it blocked BFCache.
-For the rest of the iframes, we would say "Masked".
+For the rest of the iframes, we would report null.
 See [Example4](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-4-multiple-cross-origin-iframes
 )
 
