@@ -75,7 +75,7 @@ For cross-origin frames, this should report
 4. Whether or not the frame had NotRestoredReasons
 
 For cross-origin frames, we should not expose the information on what blocked BFCache to avoid cross-site information leaks.
-Even when blocked == True, we should not report any reasons.
+Even when blocked == true, we should not report any reasons.
 
 In addition to this, when there are multiple cross-origin frames that block BFCache, we randomly select one of them and report that it blocked BFCache. This is to minimize the risk of leaking cross-origin information. The details can be found below.
 
@@ -116,11 +116,11 @@ In addition to this, when there are multiple cross-origin frames that block BFCa
   src: "a.com",
   id: "x",
   name: "x",
-  blocked: "false",
+  blocked: false,
   reasons:[],
   children: [
-  	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: "false", reasons:[], children: []},
-  	/* for b.com */ {url:"", src: "b.com", id: "z", name: "z", blocked: "true", reasons:[], children: []} 
+  	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: false, reasons:[], children: []},
+  	/* for b.com */ {url:"", src: "b.com", id: "z", name: "z", blocked: true, reasons:[], children: []} 
   ]
 }
 ```
@@ -136,18 +136,19 @@ This is true even when a subtree has same origin subframe in it, like the exampl
   src:"a.com",
   id: “x”,
   name: "x",
-  blocked: "false",
+  blocked: false,
   reasons:[],
   children: [
-  	/* b.com and its subtree */ {url:"", src:”b.com”, id: "y", name: "y", blocked: "false", reasons:[], children: []},
+  	/* b.com and its subtree */ {url:"", src:”b.com”, id: "y", name: "y", blocked: false, reasons:[], children: []},
   ]
 }
 ```
 
 ### **Example-4 (multiple cross-origin iframes)**
 
-<img src="https://user-images.githubusercontent.com/4560413/201040573-15136c53-b7d9-413a-a5ff-3e93ff7c2d7b.png" width="600" height="300">
-If multiple cross-origin iframes have blocking reasons, we randomly select one cross-origin iframe and report whether it blocked BFCache or not. For the rest of the frames, we say "masked" for the blocked value.
+<img src="[https://user-images.githubusercontent.com/4560413/201040573-15136c53-b7d9-413a-a5ff-3e93ff7c2d7b.png](https://user-images.githubusercontent.com/4560413/201832390-2c7b7dd5-ae02-4089-afc1-c195d765bfd4.png)" width="600" height="300">
+If multiple cross-origin iframes have blocking reasons, we randomly select one cross-origin iframe and report whether it blocked BFCache or not. For the rest of the frames, we report null for the blocked value.
+
 
 See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#single-cross-origin-iframe-vs-many-cross-origin-iframes) section for more details.
 
@@ -157,12 +158,12 @@ See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-rea
   src: "a.com",
   id: "x",
   name: "x",
-  blocked: "false",
+  blocked: false,
   reasons:[],
   children: [
-  	{url:"", src: "b.com", id: "b", name: "b", blocked: "masked", reasons:[], children: []},
-  	{url:"", src: "c.com", id: "c", name: "c", blocked: "true", reasons:[], children: []},
-	{url:"", src: "d.com", id: "d", name: "d", blocked: "masked", reasons:[], children: []}
+  	{url:"", src: "b.com", id: "b", name: "b", blocked: null, reasons:[], children: []},
+  	{url:"", src: "c.com", id: "c", name: "c", blocked: true, reasons:[], children: []},
+	{url:"", src: "d.com", id: "d", name: "d", blocked: null, reasons:[], children: []}
   ]
 }
 ```
@@ -175,7 +176,7 @@ We don’t want to leak cross-origin information. While exposing things that the
 
 In order not to expose any new cross-origin information, when a cross-origin frame exists in the frame tree, this API will only report whether or not the cross-origin subtree blocked BFCache, and its frame attibutes.
 
-As explained in [Example3](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-3-cross-origin-subtree) in this explainer, when the frame tree contains a cross-origin subtree, we mask the subtree information; we will not show specific reasons that blocked BFCache and only report that this subtree blocked BFCache.
+As explained in [Example3](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-3-cross-origin-subtree) in this explainer, when the frame tree contains a cross-origin subtree, we mask the subtree information; we will not show specific reasons that blocked BFCache and only report whether or not this subtree blocked BFCache.
 
 NotRestoredReasons will be part of window.performance, and this is not accessible from cross-origin subframes. This is reported only to the top main frame.
 
@@ -189,7 +190,7 @@ So giving this bit is not giving away new information, and this information can 
 However, when there are many cross-origin iframes, this API could give many bits in one go. For example, a page could embed 20 different social media sites and tell which sites the user is logged in, each bit possibly implying the user state.
 This was also technically possible to test before this API, but if we give away the information for all the frames, then that would make it significantly easier for site authors to know this information.
 
-In order to avoid this, we propose to only expose a single bit about cross-origin iframes; that is, if there are multiple cross-origin iframes that block BFCache, we randomly select one iframe and report that it blocked BFCache.
+In order to avoid this, we propose to only expose a single bit about cross-origin iframes; that is, if there are multiple cross-origin iframes, we randomly select one iframe and report whether or not it blocked BFCache.
 For the rest of the iframes, we would say "Masked".
 See [Example4](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-4-multiple-cross-origin-iframes
 )
