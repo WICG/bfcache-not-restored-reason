@@ -301,7 +301,9 @@ Pageshow API is called every time a page is loaded, and reports the ‘persisted
 We could extend the pageshow API by reporting the not-restored reasons when persisted == false (BFCache is not used). 
 
 But as per WICG discussion, Performance Navigation Timing API was more preferred, and we are not going to implement this as Pageshow API.
-
+Discussion meeting notes links:
+https://docs.google.com/document/d/1GQpM8IvL4feXQ0oQdCQIPKhZZkMLNTYJQhBUntMxPkI/edit#heading=h.mo0swzgvknmp
+https://w3c.github.io/web-performance/meetings/2022/2022-03-31/index.html
 
 ```
 window.addEventListener('pageshow', function(event) {
