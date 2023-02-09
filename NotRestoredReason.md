@@ -244,6 +244,9 @@ We could add "x-" to the browser specific reasons to distinguish them.
 ["x-foo", "bar"]
 ```
 
+### **When API is not available V.S. non-history navigation**
+When API is not available, notRestoredReasons will return `undefined`.
+When navigation is not history navigation, notRestoredReasons will return `null`.
 
 ## How to expose data
 
