@@ -252,27 +252,8 @@ When navigation is not history navigation, notRestoredReasons will return `null`
 
 There are several options on how to expose this data. The current plan is to expose it in two ways:
 
-1. Reporting API 
-
-2. Performance Navigation Timing API
-
-
-
-### **Reporting API**
-
-[Reporting API](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API) lets you observe a deprecated feature usage / browser request intervention / crashes.  We would like to have another category “bfcache” here.
-
-
-```
-Report-To: {
-             "max_age": 10886400,
-             "endpoints": [{
-               "url": "a.com"
-             }]
-           }
-// -> [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
-```
-
+1. Performance Navigation Timing API
+2. Reporting API (stretch)
 
 
 ### **Performance Navigation Timing API**
@@ -292,6 +273,23 @@ window.addEventListener("pageshow", (event) => {
   }
 });
 ```
+
+
+### **Reporting API (stretch)**
+
+[Reporting API](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API) lets you observe a deprecated feature usage / browser request intervention / crashes.  We would like to have another category “bfcache” here.
+
+
+```
+Report-To: {
+             "max_age": 10886400,
+             "endpoints": [{
+               "url": "a.com"
+             }]
+           }
+// -> [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
+```
+
 
 
 ## Considered alternatives
