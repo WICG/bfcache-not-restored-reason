@@ -268,7 +268,7 @@ window.addEventListener("pageshow", (event) => {
     for (var i=0; i < navEntries.length; i++) {
 	console.log("= Navigation entry[" + i + "]");
 	var p = navEntries[i];
-	// p.notRestoredReason == [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
+	// p.notRestoredReason == [{url:"a.com", id: "x", blocked: true, reasons:["Broadcast channel"], children:[]}]
     }
   }
 });
@@ -287,7 +287,7 @@ Report-To: {
                "url": "a.com"
              }]
            }
-// -> [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
+// -> [{url:"a.com", id: "x", blocked: true, reasons:["Broadcast channel"], children:[]}]
 ```
 
 
@@ -311,7 +311,7 @@ window.addEventListener('pageshow', function(event) {
 	if (!event.persisted) {
 		console.log("BFCache was not used.");
 	const reasons = event.notRestoredReasons;
-    // [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}];
+    // [{url:"a.com", id: "x", blocked: true, reasons:["Broadcast channel"], children:[]}];
 }
 })
 ```
