@@ -268,7 +268,7 @@ window.addEventListener("pageshow", (event) => {
     for (var i=0; i < navEntries.length; i++) {
 	console.log("= Navigation entry[" + i + "]");
 	var p = navEntries[i];
-	// p.notRestoredReason == [{url:"a.com", id: "x", blocked: true, reasons:["Broadcast channel"], children:[]}]
+	// p.notRestoredReasons == [{url:"a.com", id: "x", blocked: true, reasons:["Broadcast channel"], children:[]}]
     }
   }
 });
