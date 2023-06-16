@@ -18,27 +18,27 @@
 
 ## Motivation
 
-Browsers today offer an optimization feature for history navigation, called [back/forward cache](https://developers.google.com/web/updates/2018/07/page-lifecycle-api#back-forward-cache) (BFCache). This enables instant loading experience when users go back to a page they already visited. 
+Browsers today offer an optimization feature for history navigation, called [back/forward cache](https://developers.google.com/web/updates/2018/07/page-lifecycle-api#back-forward-cache) (bfcache). This enables instant loading experience when users go back to a page they already visited. 
 
-Today pages can be blocked from entering BFCache or get evicted while in BFCache for different reasons, such as reasons required by spec and reasons specific to the browser implementation. 
-Here is the [full list of reasons that can be reported (spreadsheet)](https://docs.google.com/spreadsheets/d/1li0po_ETJAIybpaSX5rW_lUN62upQhY0tH4pR5UPt60/edit#gid=0).
+Today pages can be blocked from entering bfcache or get evicted while in bfcache for different reasons, such as reasons required by spec and reasons specific to the browser implementation. 
+Here is the full list of reasons that can be reported: [spreadsheet](https://docs.google.com/spreadsheets/d/1li0po_ETJAIybpaSX5rW_lUN62upQhY0tH4pR5UPt60/edit#gid=0).
 
-Developers can gather the hit-rate of BFCache on their site by using [the `pageshow` handler `persisted` parameter](https://html.spec.whatwg.org/multipage/browsing-the-web.html#dom-pagetransitionevent-persisted-dev) and [PerformanceNavigationTiming.type(back-forward)](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigation/type). However, there is no way for developers to tell what reasons are blocking their pages from being restored from BFCache in the wild. They are not able to know what actions to take to improve the hit-rate.
+Developers can gather the hit-rate of bfcache on their site by using [the pageshow handler persisted parameter](https://html.spec.whatwg.org/multipage/browsing-the-web.html#dom-pagetransitionevent-persisted-dev) and [PerformanceNavigationTiming.type(back-forward)](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigation/type). However, there is no way for developers to tell what reasons are blocking their pages from being restored from bfcache in the wild. They are not able to know what actions to take to improve the hit-rate.
 
-We would like to make it possible for sites to collect information on why BFCache is not used on a history navigation, so that they can take actions on each reason and make their page BFCache compatible. First we will start exposing this information to PerformanceTiming API.
+We would like to make it possible for sites to collect information on why bfcache is not used on a history navigation, so that they can take actions on each reason and make their page bfcache compatible. First we will start exposing this information to PerformanceTiming API.
 
-The reasons reported can be the ones that were present at the timing of navigating away (i.e. the page did not enter BFCache), or the ones that made the page ineligible while the page was in BFCache (i.e. the page was evicted from BFCache).
+The reasons reported can be the ones that were present at the timing of navigating away (i.e. the page did not enter bfcache), or the ones that made the page ineligible while the page was in bfcache (i.e. the page was evicted from bfcache).
 
 Note that **we are not going to expose information about cross-origin subframes, except for the information about whether or not they blocked bfcache**.
 
 ## Goals
 
-*   Provide a way to gather data as to why a page is not served from BFCache on a history navigation.
-*   Provide an easy way to debug a website and make it BFCache compatible.
+*   Provide a way to gather data as to why a page is not served from bfcache on a history navigation.
+*   Provide an easy way to debug a website and make it bfcache compatible.
 
 ## Non-goals
 
-*   Provide a way to disable BFCache.
+*   Provide a way to disable bfcache.
 *   Provide insights into cross-origin subframes.
 
 
@@ -74,10 +74,10 @@ For cross-origin frames, this should report
 3. `src` of the frame (not the current URL)
 4. Whether or not the frame had `NotRestoredReasons`
 
-For cross-origin frames, we should not expose the information on what blocked BFCache to avoid cross-site information leaks.
-Even when `blocked` == true, we should not report any reasons.
+For cross-origin frames, we should not expose the information on what blocked bfcache to avoid cross-site information leaks.
+Even when blocked == true, we should not report any reasons.
 
-In addition to this, when there are multiple cross-origin frames that block BFCache, we randomly select one of them and report that it blocked BFCache. This is to minimize the risk of leaking cross-origin information. The details can be found below.
+In addition to this, when there are multiple cross-origin frames that block bfcache, we randomly select one of them and report that it blocked bfcache. This is to minimize the risk of leaking cross-origin information. The details can be found below.
 
 
 ## Examples
@@ -147,7 +147,7 @@ This is true even when a subtree has same origin subframe in it, like the exampl
 ### **Example-4 (multiple cross-origin iframes)**
 
 <img src="https://user-images.githubusercontent.com/4560413/201832869-27fc44e0-ca58-483d-bdc6-ea9d1d953e84.png" width="600" height="250">
-If multiple cross-origin iframes have blocking reasons, we randomly select one cross-origin iframe and report whether it blocked BFCache or not. For the rest of the frames, we report null for the blocked value.
+If multiple cross-origin iframes have blocking reasons, we randomly select one cross-origin iframe and report whether it blocked bfcache or not. For the rest of the frames, we report null for the blocked value.
 
 See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#single-cross-origin-iframe-vs-many-cross-origin-iframes) section for more details.
 
@@ -171,19 +171,19 @@ See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-rea
 
 ### **Cross-origin iframes**
 
-We don’t want to leak cross-origin information. While exposing things that the outer page knows, i.e. `id=””` and `src=””` attribute values (reference: [Measure Memory API](https://wicg.github.io/performance-measure-memory/#dictdef-memoryattributioncontainer)), we certainly don’t want to expose the blocking reasons.
+We don’t want to leak cross-origin information. While exposing things that the outer page knows, i.e. `id=""` and `src=""` attribute values (reference: [Measure Memory API](https://wicg.github.io/performance-measure-memory/#dictdef-memoryattributioncontainer)), we certainly don’t want to expose the blocking reasons.
 
-In order not to expose any new cross-origin information, when a cross-origin frame exists in the frame tree, this API will only report whether or not the cross-origin subtree blocked BFCache, and its frame attibutes.
+In order not to expose any new cross-origin information, when a cross-origin frame exists in the frame tree, this API will only report whether or not the cross-origin subtree blocked bfcache, and its frame attibutes.
 
-As explained in [Example3](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-3-cross-origin-subtree) in this explainer, when the frame tree contains a cross-origin subtree, we mask the subtree information; we will not show specific reasons that blocked BFCache and only report whether or not this subtree blocked BFCache.
+As explained in [Example3](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-3-cross-origin-subtree) in this explainer, when the frame tree contains a cross-origin subtree, we mask the subtree information; we will not show specific reasons that blocked bfcache and only report whether or not this subtree blocked bfcache.
 
 `NotRestoredReasons` will be part of `window.performance`, and this is not accessible from cross-origin subframes. This is reported only to the top main frame.
 
 #### **Single cross-origin iframe vs many cross-origin iframes**
-When we expose whether or not a cross-origin iframe blocked BFCache, site authors could potentially infer user's state. For example, when a page embeds an iframe of a social media site and if the iframe's blocking status changes based on user's logged-in state, site authors can tell if the user is logged in or not by this information.
+When we expose whether or not a cross-origin iframe blocked bfcache, site authors could potentially infer user's state. For example, when a page embeds an iframe of a social media site and if the iframe's blocking status changes based on user's logged-in state, site authors can tell if the user is logged in or not by this information.
 
-We think exposing a single bit about whether or not a cross-origin iframe blocked BFCache is fine though.
-This information - whether or not cross-origin subtree blocked BFCache - is not newly exposed. Site authors could discover this by clearing all other BFCache blocking reasons and observing whether the page is BFCached or not.
+We think exposing a single bit about whether or not a cross-origin iframe blocked bfcache is fine though.
+This information - whether or not cross-origin subtree blocked bfcache - is not newly exposed. Site authors could discover this by clearing all other bfcache blocking reasons and observing whether the page is bfcache or not.
 So giving this bit is not giving away new information, and this information can be useful so that site authors can work with the blocking sites' authors to remove the blockage.
 
 However, when there are many cross-origin iframes, this API could give many bits in one go. For example, a page could embed 20 different social media sites and tell which sites the user is logged in, each bit possibly implying the user state.
@@ -191,6 +191,7 @@ This was also technically possible to test before this API, but if we give away 
 
 In order to avoid this, we propose to only expose a single bit about cross-origin iframes; that is, if there are multiple cross-origin iframes, we randomly select one iframe and report whether or not it blocked BFCache.
 For the rest of the iframes, we would report `null`.
+
 See [Example4](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-4-multiple-cross-origin-iframes
 )
 
@@ -198,7 +199,7 @@ This way we can minimize cross-origin information leak.
 
 ### **Extension usage**
 
-If users have extensions installed and they caused BFCache to be blocked, exposing reasons can be tricky.
+If users have extensions installed and they caused bfcache to be blocked, exposing reasons can be tricky.
 There are two levels of new information exposure:
 
 ① Users have extensions installed and they are active on this page
@@ -207,22 +208,22 @@ There are two levels of new information exposure:
 
 ① is newly exposed, and maybe it’s okay. 
 But we definitely don’t want to expose any signals to detect which extensions are installed and active (②).
-We could mask all the reasons related to extensions to say “Extensions blocked BFCache”, so that we don’t give any signal for ② (turning ② into ①). 
+We could mask all the reasons related to extensions to say “Extensions blocked bfcache”, so that we don’t give any signal for ② (turning ② into ①). 
 There are three possible cases of extensions:
 
-a) Extensions executed script / had unload handlers and blocked BFCache
+a) Extensions executed script / had unload handlers and blocked bfcache
 
-b) Extensions messaged the page and blocked BFCache
+b) Extensions messaged the page and blocked bfcache
 
-c) Extensions modified the page and as a result blocked BFCache
+c) Extensions modified the page and as a result blocked bfcache
 
 In case of a) and b), we can mask the specific information and just say “Extensions blocked BFCache”.
 
-In case of c), too, we could say “Extensions blocked BFCache”, instead of a new feature that the page started to use. For example, if an extension modified the page to use IndexedDB and that blocked BFCache, we would not report “Indexed DB usage” but only say “Extensions blocked BFCache”.
+In case of c), too, we could say “Extensions blocked bfcache”, instead of a new feature that the page started to use. For example, if an extension modified the page to use IndexedDB and that blocked bfcache, we would not report “Indexed DB usage” but only say “Extensions blocked bfcache”.
 
 If exposing ① Extensions' presence is not okay to expose at all, we can mask all a) b) c) as "Internal error". There are non-extension related reasons that could go into this category, so this will not necessarily expose extensions' presence.
 
-**After talking to privacy team, we have decided to say “Extensions blocked BFCache” for all of the extension related reasons.**
+**After talking to privacy team, we have decided to say “Extensions blocked bfcache” for all of the extension related reasons.**
 
 
 ## Detailed design discussion
@@ -288,8 +289,6 @@ Report-To:  {
               }]
             }
 // -> [{url: "a.com", id: "x", blocked: true, reasons: ["Broadcast channel"], children: []}];
-```
-
 
 
 ## Considered alternatives
