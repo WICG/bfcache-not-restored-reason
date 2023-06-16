@@ -46,9 +46,9 @@ Note that **we are not going to expose information about cross-origin subframes,
 
 The goal is to equip developers with enough information to make their site bfcache compatible.
 
-In order to debug the site, developers need to be able to identify what frame within the frame-tree information applies to. This means they need to be given a tree-structure and Ids that match the frame tree. The URL for each frame is helpful for knowing the state of the frame (but cannot be given for a cross-origin iframe).
+In order to debug the site, developers need to be able to identify what frame within the frame-tree information applies to. This means they need to be given a tree-structure and IDs that match the frame tree. The URL for each frame is helpful for knowing the state of the frame (but cannot be given for a cross-origin iframe).
 
-They need to know whether the frame had NotRestoredReasons or not, and if so what reasons are present.
+They need to know whether the frame had `NotRestoredReasons` or not, and if so what reasons are present.
 
 
 ## Exposing Not-restored reasons in Tree structure
@@ -59,20 +59,20 @@ For same-origin frames, this should report
 
 
 
-1. HTML Id of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
-2. name attribute of the frame (e.g. “bar” when&lt;iframe name = “bar”>)
+1. HTML ID of the frame (e.g. “foo” when `<iframe id=“foo” src="...(URL)">`)
+2. `name` attribute of the frame (e.g. “bar” when `<iframe name="bar">`)
 3. Location (URL) of the frame
-4. "src" of the frame
-5. Whether or not the frame had NotRestoredReasons
-6. NotRestoredReasons (can be empty)
+4. `src` of the frame
+5. Whether or not the frame had `NotRestoredReasons`
+6. `NotRestoredReasons` (can be empty)
 7. Child frames
 
 For cross-origin frames, this should report
 
-1. HTML ID of the frame(e.g. “foo” when&lt;iframe id = “foo” src=”...(URL)”>)
-2. name attribute of the frame (e.g. “bar” when&lt;iframe name = “bar”>, report only the original name, not the updated name)
-3. "src" of the frame (not the current URL)
-4. Whether or not the frame had NotRestoredReasons
+1. HTML ID of the frame (e.g. “foo” when `<iframe id=“foo” src="...(URL)">)`
+2. `name` attribute of the frame (e.g. “bar” when `<iframe name="bar">`), report only the original name, not the updated name)
+3. `src` of the frame (not the current URL)
+4. Whether or not the frame had `NotRestoredReasons`
 
 For cross-origin frames, we should not expose the information on what blocked bfcache to avoid cross-site information leaks.
 Even when blocked == true, we should not report any reasons.
@@ -88,17 +88,17 @@ In addition to this, when there are multiple cross-origin frames that block bfca
 
 
 
-```
+```js
 {
-  url:"a.com",
+  url: "a.com",
   src: "a.com",
   id: "x",
   name: "x",
   blocked: false,
-  reasons:[],
+  reasons: [],
   children: [
-  	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: "false", reasons:[], children: []},
-  	{url:"a.com", src: "a.com", id: "z", name: "z", blocked: "true", reasons:["Broadcast channel"], children: []}
+    { url: "a.com", src: "a.com", id: "y", name: "y", blocked: "false", reasons: [], children: [] },
+    { url: "a.com", src: "a.com", id: "z", name: "z", blocked: "true", reasons: ["Broadcast channel"], children: [] }
   ]
 }
 ```
@@ -110,17 +110,17 @@ In addition to this, when there are multiple cross-origin frames that block bfca
 <img src="https://user-images.githubusercontent.com/4560413/138027215-b7d17251-732a-457a-8606-8f5ba5dbbf57.png" width="300" height="300">
 
 
-```
+```js
 {
-  url:"a.com",
+  url: "a.com",
   src: "a.com",
   id: "x",
   name: "x",
   blocked: false,
-  reasons:[],
+  reasons: [],
   children: [
-  	{url:"a.com", src: "a.com", id: "y", name: "y", blocked: false, reasons:[], children: []},
-  	/* for b.com */ {url:"", src: "b.com", id: "z", name: "z", blocked: true, reasons:[], children: []} 
+    { url: "a.com", src: "a.com", id: "y", name: "y", blocked: false, reasons: [], children: [] },
+  	/* for b.com */ { url: "", src: "b.com", id: "z", name: "z", blocked: true, reasons: [], children: [] }
   ]
 }
 ```
@@ -130,16 +130,16 @@ If a cross-origin iframe has a subtree under it, we mask the information of subt
 This is true even when a subtree has same origin subframe in it, like the example below.
 <img src="https://user-images.githubusercontent.com/4560413/177083018-71ac35ed-efb2-4b06-8378-d6ca9fdae621.png" width="300" height="300">
 
-```
+```js
 {
-  url:”a.com”, /* a.com */ 
-  src:"a.com",
-  id: “x”,
+  url: "a.com", /* a.com */
+  src: "a.com",
+  id: "x",
   name: "x",
   blocked: false,
-  reasons:[],
+  reasons: [],
   children: [
-  	/* b.com and its subtree */ {url:"", src:”b.com”, id: "y", name: "y", blocked: false, reasons:[], children: []},
+  	/* b.com and its subtree */ { url: "", src: "b.com", id: "y", name: "y", blocked: false, reasons: [], children: [] },
   ]
 }
 ```
@@ -151,18 +151,18 @@ If multiple cross-origin iframes have blocking reasons, we randomly select one c
 
 See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#single-cross-origin-iframe-vs-many-cross-origin-iframes) section for more details.
 
-```
+```js
 {
-  url:"a.com",
+  url: "a.com",
   src: "a.com",
   id: "x",
   name: "x",
   blocked: false,
-  reasons:[],
+  reasons: [],
   children: [
-  	{url:"", src: "b.com", id: "b", name: "b", blocked: null, reasons:[], children: []},
-  	{url:"", src: "c.com", id: "c", name: "c", blocked: true, reasons:[], children: []},
-	{url:"", src: "d.com", id: "d", name: "d", blocked: null, reasons:[], children: []}
+    { url: "", src: "b.com", id: "b", name: "b", blocked: null, reasons: [], children: [] },
+    { url: "", src: "c.com", id: "c", name: "c", blocked: true, reasons: [], children: [] },
+    { url: "", src: "d.com", id: "d", name: "d", blocked: null, reasons: [], children: [] }
   ]
 }
 ```
@@ -177,7 +177,7 @@ In order not to expose any new cross-origin information, when a cross-origin fra
 
 As explained in [Example3](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-3-cross-origin-subtree) in this explainer, when the frame tree contains a cross-origin subtree, we mask the subtree information; we will not show specific reasons that blocked bfcache and only report whether or not this subtree blocked bfcache.
 
-NotRestoredReasons will be part of window.performance, and this is not accessible from cross-origin subframes. This is reported only to the top main frame.
+`NotRestoredReasons` will be part of `window.performance`, and this is not accessible from cross-origin subframes. This is reported only to the top main frame.
 
 #### **Single cross-origin iframe vs many cross-origin iframes**
 When we expose whether or not a cross-origin iframe blocked bfcache, site authors could potentially infer user's state. For example, when a page embeds an iframe of a social media site and if the iframe's blocking status changes based on user's logged-in state, site authors can tell if the user is logged in or not by this information.
@@ -189,8 +189,9 @@ So giving this bit is not giving away new information, and this information can 
 However, when there are many cross-origin iframes, this API could give many bits in one go. For example, a page could embed 20 different social media sites and tell which sites the user is logged in, each bit possibly implying the user state.
 This was also technically possible to test before this API, but if we give away the information for all the frames, then that would make it significantly easier for site authors to know this information.
 
-In order to avoid this, we propose to only expose a single bit about cross-origin iframes; that is, if there are multiple cross-origin iframes, we randomly select one iframe and report whether or not it blocked bfcache.
-For the rest of the iframes, we would report null.
+In order to avoid this, we propose to only expose a single bit about cross-origin iframes; that is, if there are multiple cross-origin iframes, we randomly select one iframe and report whether or not it blocked BFCache.
+For the rest of the iframes, we would report `null`.
+
 See [Example4](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#example-4-multiple-cross-origin-iframes
 )
 
@@ -236,59 +237,58 @@ We could report only the blocking frames (and their parents), instead of reporti
 
 We should report reasons in strings. But we need to make sure that we differentiate between spec-mandated blocking reasons vs browser specific reasons. 
 
-We could add "x-" to the browser specific reasons to distinguish them.
+We could add `x-` to the browser specific reasons to distinguish them.
 
 
-```
+```js
 // foo is browser-specific, bar is specced.
 ["x-foo", "bar"]
 ```
 
+### **When API is not available V.S. non-history navigation**
+When API is not available, notRestoredReasons will return `undefined`.
+When navigation is not history navigation, notRestoredReasons will return `null`.
 
 ## How to expose data
 
 There are several options on how to expose this data. The current plan is to expose it in two ways:
 
-1. Reporting API 
-
-2. Performance Navigation Timing API
-
-
-
-### **Reporting API**
-
-[Reporting API](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API) lets you observe a deprecated feature usage / browser request intervention / crashes.  We would like to have another category “bfcache” here.
-
-
-```
-Report-To: {
-             "max_age": 10886400,
-             "endpoints": [{
-               "url": "a.com"
-             }]
-           }
-// -> [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
-```
-
+1. Performance Navigation Timing API
+2. Reporting API (stretch)
 
 
 ### **Performance Navigation Timing API**
 
-[Performance Navigation Timing API](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming) tells you the type of navigation (bfcache, prerender). We could also extend this API to report the not-restored reasons.
+[Performance Navigation Timing API](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming) tells you the type of navigation (BFCache, prerender). We could also extend this API to report the not-restored reasons.
 
 
-```
-window.addEventListener("pageshow", (event) => {
+```js
+window.addEventListener('pageshow', (event) => {
   if (!event.persisted) {
-    const navEntries = performance.getEntriesByType("navigation");
-    for (var i=0; i < navEntries.length; i++) {
-	console.log("= Navigation entry[" + i + "]");
-	var p = navEntries[i];
-	// p.notRestoredReasons == [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}]
+    const navEntries = performance.getEntriesByType('navigation');
+    for (let i = 0; i < navEntries.length; i++) {
+      console.log('Navigation entry:', i);
+      const p = navEntries[i];
+      // p.notRestoredReasons == [{url: "a.com", id: "x", blocked: true, reasons: ["Broadcast channel"], children: []}]
     }
   }
 });
 ```
+
+
+### **Reporting API (stretch)**
+
+[Reporting API](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API) lets you observe a deprecated feature usage / browser request intervention / crashes.  We would like to have another category “bfcache” here.
+
+
+```js
+Report-To:  {
+              "max_age": 10886400,
+              "endpoints": [{
+                "url": "a.com"
+              }]
+            }
+// -> [{url: "a.com", id: "x", blocked: true, reasons: ["Broadcast channel"], children: []}];
 
 
 ## Considered alternatives
@@ -296,23 +296,23 @@ window.addEventListener("pageshow", (event) => {
 
 ### **Pageshow API**
 
-Pageshow API is called every time a page is loaded, and reports the ‘persisted’ parameter to suggest whether it was the initial load or the cache load.
+Pageshow API is called every time a page is loaded, and reports the `persisted` parameter to suggest whether it was the initial load or the cache load.
 
-We could extend the pageshow API by reporting the not-restored reasons when persisted == false (bfcache is not used). 
+We could extend the pageshow API by reporting the not-restored reasons when `persisted == false` (BFCache is not used). 
 
 But as per WICG discussion, Performance Navigation Timing API was more preferred, and we are not going to implement this as Pageshow API.
 Discussion meeting notes links:
 https://docs.google.com/document/d/1GQpM8IvL4feXQ0oQdCQIPKhZZkMLNTYJQhBUntMxPkI/edit#heading=h.mo0swzgvknmp
 https://w3c.github.io/web-performance/meetings/2022/2022-03-31/index.html
 
-```
+```js
 window.addEventListener('pageshow', function(event) {
-	if (!event.persisted) {
-		console.log("bfcache was not used.");
-	const reasons = event.notRestoredReasons;
-    // [{url:"a.com", id: "x", blocked: true, reasons:["broadcast channel"], children:[]}];
-}
-})
+  if (!event.persisted) {
+    console.log('BFCache was not used.');
+    const reasons = event.notRestoredReasons;
+    // [{url: "a.com", id: "x", blocked: true, reasons: ["Broadcast channel"], children: []}];
+  }
+});
 ```
 
 
