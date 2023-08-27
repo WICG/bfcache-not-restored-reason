@@ -289,7 +289,7 @@ Report-To:  {
               }]
             }
 // -> [{url: "a.com", id: "x", blocked: true, reasons: ["Broadcast channel"], children: []}];
-
+```
 
 ## Considered alternatives
 
