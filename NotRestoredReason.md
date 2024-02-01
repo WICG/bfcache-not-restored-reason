@@ -63,8 +63,7 @@ For same-origin frames, this should report
 2. `name` attribute of the frame (e.g. “bar” when `<iframe name="bar">`)
 3. Location (URL) of the frame
 4. `src` of the frame
-5. Whether or not the frame had `NotRestoredReasons`
-6. `NotRestoredReasons` (can be empty)
+5. `NotRestoredReasons` (can be empty)
 7. Child frames
 
 For cross-origin frames, this should report
@@ -74,10 +73,9 @@ For cross-origin frames, this should report
 3. `src` of the frame (not the current URL)
 4. Whether or not the frame had `NotRestoredReasons`
 
-For cross-origin frames, we should not expose the information on what blocked bfcache to avoid cross-site information leaks.
-Even when blocked == true, we should not report any reasons.
-
-In addition to this, when there are multiple cross-origin frames that block bfcache, we randomly select one of them and report that it blocked bfcache. This is to minimize the risk of leaking cross-origin information. The details can be found below.
+For cross-origin frames, we should not expose the information on what blocked
+bfcache to avoid cross-site information leaks. Instead, when any cross-origin
+iframe blocks bfcache, the main frame will report "masked" as a reason.
 
 
 ## Examples
@@ -94,11 +92,10 @@ In addition to this, when there are multiple cross-origin frames that block bfca
   src: "a.com",
   id: "x",
   name: "x",
-  blocked: false,
-  reasons: [],
+  reasons: {},
   children: [
-    { url: "a.com", src: "a.com", id: "y", name: "y", blocked: "false", reasons: [], children: [] },
-    { url: "a.com", src: "a.com", id: "z", name: "z", blocked: "true", reasons: ["Broadcast channel"], children: [] }
+    { url: "a.com", src: "a.com", id: "y", name: "y", reasons: {}, children: [] },
+    { url: "a.com", src: "a.com", id: "z", name: "z", reasons: {reason: "Broadcast channel"}, children: [] }
   ]
 }
 ```
@@ -116,11 +113,10 @@ In addition to this, when there are multiple cross-origin frames that block bfca
   src: "a.com",
   id: "x",
   name: "x",
-  blocked: false,
-  reasons: [],
+  reasons: {reason: "masked"},
   children: [
-    { url: "a.com", src: "a.com", id: "y", name: "y", blocked: false, reasons: [], children: [] },
-  	/* for b.com */ { url: "", src: "b.com", id: "z", name: "z", blocked: true, reasons: [], children: [] }
+    { url: "a.com", src: "a.com", id: "y", name: "y", reasons: {}, children: [] },
+  	/* for b.com */ { url: "", src: "b.com", id: "z", name: "z", reasons: {}, children: [] }
   ]
 }
 ```
@@ -136,10 +132,9 @@ This is true even when a subtree has same origin subframe in it, like the exampl
   src: "a.com",
   id: "x",
   name: "x",
-  blocked: false,
-  reasons: [],
+  reasons: {},
   children: [
-  	/* b.com and its subtree */ { url: "", src: "b.com", id: "y", name: "y", blocked: false, reasons: [], children: [] },
+  	/* b.com and its subtree */ { url: "", src: "b.com", id: "y", name: "y", reasons: {}, children: [] },
   ]
 }
 ```
@@ -147,8 +142,9 @@ This is true even when a subtree has same origin subframe in it, like the exampl
 ### **Example-4 (multiple cross-origin iframes)**
 
 <img src="https://user-images.githubusercontent.com/4560413/201832869-27fc44e0-ca58-483d-bdc6-ea9d1d953e84.png" width="600" height="250">
-If multiple cross-origin iframes have blocking reasons, we randomly select one cross-origin iframe and report whether it blocked bfcache or not. For the rest of the frames, we report null for the blocked value.
-
+If multiple cross-origin iframes have blocking reasons, we randomly select one
+cross-origin iframe and report whether it blocked bfcache or not. For the
+selected frame, reasons reports "masked".
 See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-reason/blob/main/NotRestoredReason.md#single-cross-origin-iframe-vs-many-cross-origin-iframes) section for more details.
 
 ```js
@@ -157,11 +153,10 @@ See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-rea
   src: "a.com",
   id: "x",
   name: "x",
-  blocked: false,
-  reasons: [],
+  reasons: {},
   children: [
-    { url: "", src: "b.com", id: "b", name: "b", blocked: null, reasons: [], children: [] },
-    { url: "", src: "c.com", id: "c", name: "c", blocked: true, reasons: [], children: [] },
+    { url: "", src: "b.com", id: "b", name: "b", reasons: {}, children: [] },
+    { url: "", src: "c.com", id: "c", name: "c", reasons: {reason:"masked"}, children: [] },
     { url: "", src: "d.com", id: "d", name: "d", blocked: null, reasons: [], children: [] }
   ]
 }
@@ -249,13 +244,7 @@ We could add `x-` to the browser specific reasons to distinguish them.
 When API is not available, notRestoredReasons will return `undefined`.
 When navigation is not history navigation, notRestoredReasons will return `null`.
 
-## How to expose data
-
-There are several options on how to expose this data. The current plan is to expose it in two ways:
-
-1. Performance Navigation Timing API
-2. Reporting API (stretch)
-
+## How to expose the data
 
 ### **Performance Navigation Timing API**
 
@@ -269,14 +258,16 @@ window.addEventListener('pageshow', (event) => {
     for (let i = 0; i < navEntries.length; i++) {
       console.log('Navigation entry:', i);
       const p = navEntries[i];
-      // p.notRestoredReasons == [{url: "a.com", id: "x", blocked: true, reasons: ["Broadcast channel"], children: []}]
+      // p.notRestoredReasons == [{url: "a.com", id: "x", reasons: {reason: "Broadcast channel"}, children: []}]
     }
   }
 });
 ```
 
 
-### **Reporting API (stretch)**
+##  Considered alternatives
+
+### **Reporting API**
 
 [Reporting API](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API) lets you observe a deprecated feature usage / browser request intervention / crashes.  We would like to have another category “bfcache” here.
 
@@ -290,8 +281,6 @@ Report-To:  {
             }
 // -> [{url: "a.com", id: "x", blocked: true, reasons: ["Broadcast channel"], children: []}];
 
-
-## Considered alternatives
 
 
 ### **Pageshow API**
