@@ -71,7 +71,6 @@ For cross-origin frames, this should report
 1. HTML ID of the frame (e.g. “foo” when `<iframe id=“foo” src="...(URL)">)`
 2. `name` attribute of the frame (e.g. “bar” when `<iframe name="bar">`), report only the original name, not the updated name)
 3. `src` of the frame (not the current URL)
-4. Whether or not the frame had `NotRestoredReasons`
 
 For cross-origin frames, we should not expose the information on what blocked
 bfcache to avoid cross-site information leaks. Instead, when any cross-origin
@@ -157,7 +156,7 @@ See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-rea
   children: [
     { url: "", src: "b.com", id: "b", name: "b", reasons: {}, children: [] },
     { url: "", src: "c.com", id: "c", name: "c", reasons: {reason:"masked"}, children: [] },
-    { url: "", src: "d.com", id: "d", name: "d", blocked: null, reasons: [], children: [] }
+    { url: "", src: "d.com", id: "d", name: "d", blocked: null, reasons: {}, children: [] }
   ]
 }
 ```
@@ -279,9 +278,8 @@ Report-To:  {
                 "url": "a.com"
               }]
             }
-// -> [{url: "a.com", id: "x", blocked: true, reasons: ["Broadcast channel"], children: []}];
-
-
+// -> [{url: "a.com", id: "x", reasons: {reason: "Broadcast channel"}, children: []}];
+```
 
 ### **Pageshow API**
 
