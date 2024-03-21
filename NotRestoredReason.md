@@ -94,7 +94,7 @@ iframe blocks bfcache, the main frame will report "masked" as a reason.
   reasons: {},
   children: [
     { url: "a.com", src: "a.com", id: "y", name: "y", reasons: {}, children: [] },
-    { url: "a.com", src: "a.com", id: "z", name: "z", reasons: {reason: "Broadcast channel"}, children: [] }
+    { url: "a.com", src: "a.com", id: "z", name: "z", reasons: {reason: "broadcastchannel"}, children: [] }
   ]
 }
 ```
@@ -102,7 +102,7 @@ iframe blocks bfcache, the main frame will report "masked" as a reason.
 
 
 ### **Example-2 (cross-origin iframes)**
-If a cross-origin iframe is blocking, its reasons will be empty, and instead,
+If a cross-origin iframe is blocking, its reasons will be null, and instead,
 the main frame will have "masked" reason.
 <img src="https://user-images.githubusercontent.com/4560413/138027215-b7d17251-732a-457a-8606-8f5ba5dbbf57.png" width="300" height="300">
 
@@ -116,7 +116,7 @@ the main frame will have "masked" reason.
   reasons: {reason: "masked"},
   children: [
     { url: "a.com", src: "a.com", id: "y", name: "y", reasons: {}, children: [] },
-  	/* for b.com */ { url: "", src: "b.com", id: "z", name: "z", reasons: {}, children: [] }
+  	/* for b.com */ { url: "", src: "b.com", id: "z", name: "z", reasons: null, children: null }
   ]
 }
 ```
@@ -136,7 +136,7 @@ have "masked" as a reason.
   name: "x",
   reasons: {reason: "masked"},
   children: [
-  	/* b.com and its subtree */ { url: "", src: "b.com", id: "y", name: "y", reasons: {}, children: [] },
+  	/* b.com and its subtree */ { url: "", src: "b.com", id: "y", name: "y", reasons: null, children: null },
   ]
 }
 ```
@@ -159,9 +159,9 @@ See [Security and Privacy](https://github.com/rubberyuzu/bfcache-not-retored-rea
   name: "x",
   reasons: {reason: "masked"},
   children: [
-    { url: "", src: "b.com", id: "b", name: "b", reasons: {}, children: [] },
-    { url: "", src: "c.com", id: "c", name: "c", reasons: {reason:"masked"}, children: [] },
-    { url: "", src: "d.com", id: "d", name: "d", reasons: {}, children: [] }
+    { url: "", src: "b.com", id: "b", name: "b", reasons: null, children: null },
+    { url: "", src: "c.com", id: "c", name: "c", reasons: {reason:"masked"}, children: null },
+    { url: "", src: "d.com", id: "d", name: "d", reasons: null, children: null }
   ]
 }
 ```
